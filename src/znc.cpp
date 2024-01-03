@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2023 ZNC, see the NOTICE file for details.
+ * Copyright (C) 2004-2024 ZNC, see the NOTICE file for details.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -734,10 +734,8 @@ bool CZNC::WriteNewConfig(const CString& sConfigFile) {
     } while (!CUser::IsValidUsername(sUser));
 
     vsLines.push_back("<User " + sUser + ">");
-    CString sSalt;
-    sAnswer = CUtils::GetSaltedHashPass(sSalt);
-    vsLines.push_back("\tPass       = " + CUtils::sDefaultHash + "#" + sAnswer +
-                      "#" + sSalt + "#");
+    sAnswer = CUtils::AskSaltedHashPassForConfig();
+	vsLines.push_back(sAnswer);
 
     vsLines.push_back("\tAdmin      = true");
 

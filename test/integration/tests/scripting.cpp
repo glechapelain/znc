@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2023 ZNC, see the NOTICE file for details.
+ * Copyright (C) 2004-2024 ZNC, see the NOTICE file for details.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -277,6 +277,11 @@ TEST_F(ZNCTest, ModpythonPackage) {
     client.Write("znc updatemod packagetest");
     client.Write("PRIVMSG *packagetest :foo");
     client.ReadUntil("value = b");
+    // Test if python modules are viewable via *status.
+    // https://github.com/znc/znc/issues/1884
+    client.Write("znc listavailmods");
+    client.ReadUntil(":*status!status@znc.in PRIVMSG nick :\x02 packagetest");
+    client.ReadUntil(":*status!status@znc.in PRIVMSG nick :\x02 pyeval\x0F: Evaluates python code");
 }
 
 TEST_F(ZNCTest, ModpythonModperl) {
